@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light Mode Colors */
+    --background: #FFFFFF;
+    --foreground: #0F172A;
+    
+    --primary: #1E40AF;
+    --primary-foreground: #FFFFFF;
+    
+    --accent: #0D9488;
+    --accent-foreground: #FFFFFF;
+    
+    --muted: #F8FAFC;
+    --muted-foreground: #475569;
+    
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    
+    --border: #E2E8F0;
+  }
+
+  .dark {
+    /* Dark Mode Colors */
+    --background: #0F172A;
+    --foreground: #F8FAFC;
+    
+    --primary: #3B82F6;
+    --primary-foreground: #FFFFFF;
+    
+    --accent: #22D3EE;
+    --accent-foreground: #0F172A;
+    
+    --muted: #1E293B;
+    --muted-foreground: #CBD5E1;
+    
+    --card: #1E293B;
+    --card-foreground: #F8FAFC;
+    
+    --border: #334155;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg 
+           bg-primary text-primary-foreground font-medium
+           transition-all duration-300 hover:opacity-90 hover:shadow-lg
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg 
+           border-2 border-primary text-primary font-medium
+           transition-all duration-300 hover:bg-primary hover:text-primary-foreground
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg 
+           bg-accent text-accent-foreground font-medium
+           transition-all duration-300 hover:opacity-90 hover:shadow-lg
+           focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Selection */
+::selection {
+  @apply bg-primary/20 text-foreground;
+}
