@@ -143,14 +143,16 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-full;
+  background: color-mix(in srgb, var(--muted-foreground) 30%, transparent);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/50;
+  background: color-mix(in srgb, var(--muted-foreground) 50%, transparent);
 }
 
 /* Selection */
 ::selection {
-  @apply bg-primary/20 text-foreground;
+  background: color-mix(in srgb, var(--primary) 20%, transparent);
+  color: var(--foreground);
 }
