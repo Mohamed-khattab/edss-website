@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useGSAP } from '@gsap/react'
+import { gsap } from '@/lib/gsap'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
@@ -31,6 +33,27 @@ const testimonials = [
 
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const sectionRef = useRef<HTMLElement>(null)
+  const headingRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current || !headingRef.current) return
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 78%',
+          once: true,
+        },
+        defaults: { ease: 'power3.out' },
+      })
+      tl.from(headingRef.current, { opacity: 0, y: 40, duration: 0.7 })
+        .from(cardRef.current, { opacity: 0, y: 40, duration: 0.6 }, '-=0.35')
+    },
+    { scope: sectionRef }
+  )
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length)
@@ -41,7 +64,7 @@ export function Testimonials() {
   }
 
   return (
-    <section className="section-padding relative overflow-hidden">
+    <section ref={sectionRef} className="section-padding relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
@@ -49,13 +72,15 @@ export function Testimonials() {
       </div>
 
       <div className="container-wide relative">
-        <SectionHeading
-          label="Testimonials"
-          title="What Our Clients Say"
-          description="Don't just take our word for it. Hear from the businesses we've helped succeed."
-        />
+        <div ref={headingRef}>
+          <SectionHeading
+            label="Testimonials"
+            title="What Our Clients Say"
+            description="Don't just take our word for it. Hear from the businesses we've helped succeed."
+          />
+        </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div ref={cardRef} className="max-w-4xl mx-auto">
           <div className="relative bg-card rounded-3xl border border-border p-8 md:p-12 shadow-lg">
             {/* Quote icon */}
             <div className="absolute -top-6 left-10">
@@ -78,7 +103,7 @@ export function Testimonials() {
                   <blockquote className="text-xl md:text-2xl text-foreground leading-relaxed mb-8">
                     &ldquo;{testimonials[currentIndex].quote}&rdquo;
                   </blockquote>
-                  
+
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                       <span className="text-xl font-bold text-primary">
@@ -114,7 +139,7 @@ export function Testimonials() {
                   />
                 ))}
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <button
                   onClick={prevTestimonial}

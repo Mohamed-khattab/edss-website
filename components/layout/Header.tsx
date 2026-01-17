@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useGSAP } from '@gsap/react'
+import { gsap } from '@/lib/gsap'
 import { Menu, X } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { cn } from '@/lib/utils'
@@ -19,6 +21,15 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const navRef = useRef<HTMLElement>(null)
+
+  useGSAP(
+    () => {
+      if (!navRef.current) return
+      gsap.from(navRef.current, { y: -16, opacity: 0, duration: 0.6, ease: 'power3.out' })
+    },
+    { scope: navRef }
+  )
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +46,7 @@ export function Header() {
 
   return (
     <header
+      ref={navRef}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled

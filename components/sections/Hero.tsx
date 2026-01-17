@@ -1,84 +1,124 @@
 'use client'
 
+import { useRef } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { useGSAP } from '@gsap/react'
+import { gsap } from '@/lib/gsap'
 import { ArrowRight, Code2, Network, Cpu, Settings } from 'lucide-react'
 
 const floatingIcons = [
-  { Icon: Code2, delay: 0, position: 'top-20 left-10' },
-  { Icon: Network, delay: 0.2, position: 'top-40 right-20' },
-  { Icon: Cpu, delay: 0.4, position: 'bottom-32 left-20' },
-  { Icon: Settings, delay: 0.6, position: 'bottom-20 right-10' },
+  { Icon: Code2, position: 'top-20 left-10' },
+  { Icon: Network, position: 'top-40 right-20' },
+  { Icon: Cpu, position: 'bottom-32 left-20' },
+  { Icon: Settings, position: 'bottom-20 right-10' },
 ]
 
 export function Hero() {
+  const heroRef = useRef<HTMLElement>(null)
+  const badgeRef = useRef<HTMLSpanElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const subtitleRef = useRef<HTMLParagraphElement>(null)
+  const ctaRef = useRef<HTMLDivElement>(null)
+  const trustRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollDotRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      if (!heroRef.current || !badgeRef.current) return
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      tl.from(badgeRef.current, { opacity: 0, y: 30, duration: 0.6 })
+        .from(titleRef.current, { opacity: 0, y: 50, duration: 0.8 }, '-=0.35')
+        .from(subtitleRef.current, { opacity: 0, y: 30, duration: 0.6 }, '-=0.45')
+        .from(ctaRef.current, { opacity: 0, y: 30, duration: 0.5 }, '-=0.35')
+        .from(trustRef.current, { opacity: 0, duration: 0.6 }, '-=0.25')
+        .from(scrollRef.current, { opacity: 0, y: -10, duration: 0.5 }, '-=0.2')
+
+      gsap.fromTo(
+        '.float-icon',
+        { y: -10 },
+        { y: 10, yoyo: true, repeat: -1, duration: 2, ease: 'sine.inOut', stagger: 0.2 }
+      )
+
+      gsap.to('.hero-blob', {
+        scale: 1.08,
+        opacity: 0.7,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      })
+
+      if (scrollDotRef.current) {
+        gsap.to(scrollDotRef.current, {
+          y: 5,
+          duration: 0.75,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+          delay: 1,
+        })
+      }
+    },
+    { scope: heroRef }
+  )
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      ref={heroRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-muted via-background to-muted" />
-      
+
       {/* Animated background shapes */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        <div className="hero-blob absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="hero-blob absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
       </div>
 
       {/* Floating icons */}
-      {floatingIcons.map(({ Icon, delay, position }, index) => (
-        <motion.div
+      {floatingIcons.map(({ Icon, position }, index) => (
+        <div
           key={index}
           className={`absolute ${position} hidden lg:block`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 0.2, y: 0 }}
-          transition={{ delay: delay + 0.5, duration: 0.5 }}
         >
-          <motion.div
-            animate={{ y: [-10, 10, -10] }}
-            transition={{ duration: 4, repeat: Infinity, delay }}
-          >
+          <div className="float-icon">
             <Icon className="w-12 h-12 text-primary" />
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       ))}
 
       {/* Content */}
       <div className="container-wide relative z-10 pt-20">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+          <span
+            ref={badgeRef}
+            className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
           >
-            <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-              Welcome to EDSS Group
-            </span>
-          </motion.div>
+            Welcome to EDSS Group
+          </span>
 
-          <motion.h1
+          <h1
+            ref={titleRef}
             className="text-4xl md:text-5xl lg:text-7xl font-bold text-foreground mb-6 leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
           >
             Transforming Ideas Into{' '}
             <span className="gradient-text">Digital Reality</span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
+          <p
+            ref={subtitleRef}
             className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            We deliver cutting-edge software solutions, network infrastructure, 
+            We deliver cutting-edge software solutions, network infrastructure,
             smart systems, and enterprise integration services that drive business growth.
-          </motion.p>
+          </p>
 
-          <motion.div
+          <div
+            ref={ctaRef}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
           >
             <Link href="/contact" className="btn-primary text-lg px-8 py-4">
               Start Your Project
@@ -87,15 +127,10 @@ export function Hero() {
             <Link href="/case-studies" className="btn-secondary text-lg px-8 py-4">
               View Our Work
             </Link>
-          </motion.div>
+          </div>
 
           {/* Trust indicators */}
-          <motion.div
-            className="mt-16 pt-16 border-t border-border"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
+          <div ref={trustRef} className="mt-16 pt-16 border-t border-border">
             <p className="text-sm text-muted-foreground mb-6">
               Trusted by leading businesses across industries
             </p>
@@ -106,25 +141,22 @@ export function Hero() {
                 </span>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
+      <div
+        ref={scrollRef}
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
       >
-        <motion.div
-          className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2"
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
-        </motion.div>
-      </motion.div>
+        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
+          <div
+            ref={scrollDotRef}
+            className="w-1 h-2 rounded-full bg-muted-foreground/50"
+          />
+        </div>
+      </div>
     </section>
   )
 }
