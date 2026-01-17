@@ -7,7 +7,7 @@ import { gsap } from '@/lib/gsap'
 import { motion } from 'framer-motion'
 import { 
   Code2, Network, Cpu, Settings, 
-  CheckCircle2, ArrowRight,
+  CheckCircle2, ArrowRight, ArrowUpRight,
   Smartphone, Globe, Database, Cloud,
   Shield, Wifi, Server, Router,
   Lightbulb, Gauge, Fingerprint, Home,
@@ -175,6 +175,42 @@ export default function ServicesPage() {
               From custom software to enterprise integration, we deliver end-to-end solutions 
               that transform how businesses operate and grow.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Overview */}
+      <section className="section-padding bg-muted">
+        <div className="container-wide">
+          <SectionHeading
+            label="Our Services"
+            title="Explore Our Core Capabilities"
+            description="A quick snapshot of our key service pillars. Jump to any section to learn more."
+          />
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {services.map((service) => (
+              <Link
+                key={service.id}
+                href={`#${service.id}`}
+                className="group block h-full rounded-2xl border border-border bg-card p-6 card-hover"
+              >
+                <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${service.color}`}>
+                  <service.icon className="h-7 w-7 text-white" />
+                </div>
+
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                    {service.title}
+                  </h3>
+                  <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                </div>
+
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

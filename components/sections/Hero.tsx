@@ -139,7 +139,7 @@ export function Hero() {
 
           <h1
             ref={titleRef}
-            className="text-4xl md:text-5xl lg:text-7xl font-bold text-foreground mb-6 leading-tight"
+            className="text-4xl md:text-5xl lg:text-7xl font-bold text-foreground mb-6 leading-tight flex flex-wrap justify-center gap-x-3 gap-y-2"
           >
             {titleWords.map((word, index) => (
               <span
@@ -147,7 +147,6 @@ export function Hero() {
                 className={`hero-title-word inline-block ${word.gradient ? 'gradient-text' : ''}`}
               >
                 {word.text}
-                {index < titleWords.length - 1 ? ' ' : ''}
               </span>
             ))}
           </h1>

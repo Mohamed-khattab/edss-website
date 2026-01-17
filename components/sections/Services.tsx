@@ -75,40 +75,38 @@ export function Services() {
         },
         defaults: { ease: 'power3.out' },
       })
-      tl.from(headingRef.current, { opacity: 0, y: 40, duration: 0.7 })
-        .from(
+      tl.fromTo(
+        headingRef.current,
+        { opacity: 1, y: 40 },
+        { opacity: 1, y: 0, duration: 0.7, clearProps: 'transform' }
+      )
+        .fromTo(
           highlightsRef.current?.children ?? [],
-          { opacity: 0, y: 24, duration: 0.5, stagger: 0.1 },
+          { opacity: 1, y: 24 },
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, clearProps: 'transform' },
           '-=0.35'
         )
-        .from(
+        .fromTo(
           gridRef.current?.children ?? [],
-          { opacity: 0, y: 50, duration: 0.6, stagger: 0.1 },
-          '-=0.35'
+          { opacity: 1, y: 32 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, clearProps: 'transform' },
+          '-=0.3'
         )
-        .from(ctaRef.current, { opacity: 0, y: 24, duration: 0.5 }, '-=0.25')
-
-      gsap.to('.service-icon', {
-        y: -6,
-        duration: 2.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-      })
+        .fromTo(
+          ctaRef.current,
+          { opacity: 1, y: 24 },
+          { opacity: 1, y: 0, duration: 0.5, clearProps: 'transform' },
+          '-=0.25'
+        )
     },
     { scope: sectionRef }
   )
 
   return (
     <section ref={sectionRef} className="section-padding bg-muted relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-20" />
-      <div className="absolute inset-0 bg-noise opacity-20 mix-blend-soft-light" />
-      <div className="container-wide">
+      <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-noise opacity-10 pointer-events-none" />
+      <div className="container-wide relative z-10">
         <div ref={headingRef}>
           <SectionHeading
             label="What We Do"
@@ -132,7 +130,14 @@ export function Services() {
           ))}
         </div>
 
-        <div ref={gridRef} className="grid md:grid-cols-2 gap-6 relative mt-10">
+        <div className="mt-12">
+          <SectionHeading
+            label="What We Provide"
+            title="Our Core Services"
+            description="Our comprehensive suite of services designed to meet your unique business needs."
+          />
+        </div>
+        <div ref={gridRef} className="mt-10 grid gap-6 md:grid-cols-2">
           {services.map((service) => (
             <Link
               key={service.title}

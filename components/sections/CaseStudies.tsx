@@ -55,13 +55,23 @@ export function CaseStudies() {
         },
         defaults: { ease: 'power3.out' },
       })
-      tl.from(headingRef.current, { opacity: 0, y: 40, duration: 0.7 })
-        .from(
+      tl.fromTo(
+        headingRef.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.7, clearProps: 'opacity,transform' }
+      )
+        .fromTo(
           gridRef.current?.children ?? [],
-          { opacity: 0, y: 50, duration: 0.6, stagger: 0.15 },
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, clearProps: 'opacity,transform' },
           '-=0.35'
         )
-        .from(ctaRef.current, { opacity: 0, y: 24, duration: 0.5 }, '-=0.25')
+        .fromTo(
+          ctaRef.current,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.5, clearProps: 'opacity,transform' },
+          '-=0.25'
+        )
 
       gsap.to('.case-orb', {
         y: -14,
