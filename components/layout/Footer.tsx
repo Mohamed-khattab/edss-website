@@ -1,20 +1,8 @@
-import Link from 'next/link'
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from 'lucide-react'
+'use client'
 
-const footerLinks = {
-  company: [
-    { name: 'About Us', href: '/about' },
-    { name: 'Our Services', href: '/services' },
-    { name: 'Case Studies', href: '/case-studies' },
-    { name: 'Contact', href: '/contact' },
-  ],
-  services: [
-    { name: 'Software Development', href: '/services#software' },
-    { name: 'Network Solutions', href: '/services#networks' },
-    { name: 'Smart Systems', href: '/services#smart-systems' },
-    { name: 'System Integration', href: '/services#integration' },
-  ],
-}
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from 'lucide-react'
 
 const socialLinks = [
   { name: 'LinkedIn', href: '#', icon: Linkedin },
@@ -23,6 +11,38 @@ const socialLinks = [
 ]
 
 export function Footer() {
+  const pathname = usePathname()
+  const isArabic = pathname.startsWith('/ar')
+  const footerLinks = isArabic
+    ? {
+        company: [
+          { name: 'عن الشركة', href: '/ar/about' },
+          { name: 'الخدمات', href: '/ar/services' },
+          { name: 'دراسات الحالة', href: '/ar/case-studies' },
+          { name: 'تواصل معنا', href: '/ar/contact' },
+        ],
+        services: [
+          { name: 'تطوير البرمجيات', href: '/ar/services#software' },
+          { name: 'حلول الشبكات', href: '/ar/services#networks' },
+          { name: 'الأنظمة الذكية', href: '/ar/services#smart-systems' },
+          { name: 'تكامل الأنظمة', href: '/ar/services#integration' },
+        ],
+      }
+    : {
+        company: [
+          { name: 'About Us', href: '/about' },
+          { name: 'Our Services', href: '/services' },
+          { name: 'Case Studies', href: '/case-studies' },
+          { name: 'Contact', href: '/contact' },
+        ],
+        services: [
+          { name: 'Software Development', href: '/services#software' },
+          { name: 'Network Solutions', href: '/services#networks' },
+          { name: 'Smart Systems', href: '/services#smart-systems' },
+          { name: 'System Integration', href: '/services#integration' },
+        ],
+      }
+
   return (
     <footer className="bg-muted border-t border-border">
       <div className="container-wide section-padding">
@@ -38,8 +58,9 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-              A leading technology company providing software development, network solutions, 
-              smart systems, and system integration services.
+              {isArabic
+                ? 'شركة تقنية رائدة تقدم تطوير البرمجيات، حلول الشبكات، الأنظمة الذكية، وخدمات تكامل الأنظمة.'
+                : 'A leading technology company providing software development, network solutions, smart systems, and system integration services.'}
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((social) => (
@@ -57,7 +78,9 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h3 className="font-heading font-semibold text-foreground mb-6">Company</h3>
+            <h3 className="font-heading font-semibold text-foreground mb-6">
+              {isArabic ? 'الشركة' : 'Company'}
+            </h3>
             <ul className="space-y-4">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -74,7 +97,9 @@ export function Footer() {
 
           {/* Services Links */}
           <div>
-            <h3 className="font-heading font-semibold text-foreground mb-6">Services</h3>
+            <h3 className="font-heading font-semibold text-foreground mb-6">
+              {isArabic ? 'الخدمات' : 'Services'}
+            </h3>
             <ul className="space-y-4">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
@@ -91,7 +116,9 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="font-heading font-semibold text-foreground mb-6">Contact Us</h3>
+            <h3 className="font-heading font-semibold text-foreground mb-6">
+              {isArabic ? 'تواصل معنا' : 'Contact Us'}
+            </h3>
             <ul className="space-y-4">
               <li>
                 <a
@@ -124,20 +151,20 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} EDSS Group. All rights reserved.
+            © {new Date().getFullYear()} EDSS Group. {isArabic ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
           </p>
           <div className="flex items-center gap-6">
             <Link
-              href="/privacy"
+              href={isArabic ? '/ar/privacy' : '/privacy'}
               className="text-muted-foreground hover:text-primary transition-colors text-sm"
             >
-              Privacy Policy
+              {isArabic ? 'سياسة الخصوصية' : 'Privacy Policy'}
             </Link>
             <Link
-              href="/terms"
+              href={isArabic ? '/ar/terms' : '/terms'}
               className="text-muted-foreground hover:text-primary transition-colors text-sm"
             >
-              Terms of Service
+              {isArabic ? 'شروط الخدمة' : 'Terms of Service'}
             </Link>
           </div>
         </div>

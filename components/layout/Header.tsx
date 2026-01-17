@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useGSAP } from '@gsap/react'
@@ -9,19 +9,34 @@ import { Menu, X } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { cn } from '@/lib/utils'
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Services', href: '/services' },
-  { name: 'Case Studies', href: '/case-studies' },
-  { name: 'Contact', href: '/contact' },
-]
-
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const isArabic = pathname.startsWith('/ar')
   const navRef = useRef<HTMLElement>(null)
+  const navigation = useMemo(
+    () =>
+      isArabic
+        ? [
+            { name: 'الرئيسية', href: '/ar' },
+            { name: 'عن الشركة', href: '/ar/about' },
+            { name: 'الخدمات', href: '/ar/services' },
+            { name: 'دراسات الحالة', href: '/ar/case-studies' },
+            { name: 'تواصل معنا', href: '/ar/contact' },
+          ]
+        : [
+            { name: 'Home', href: '/' },
+            { name: 'About', href: '/about' },
+            { name: 'Services', href: '/services' },
+            { name: 'Case Studies', href: '/case-studies' },
+            { name: 'Contact', href: '/contact' },
+          ],
+    [isArabic]
+  )
+  const languageHref = isArabic
+    ? pathname.replace(/^\/ar(\/|$)/, '/')
+    : `/ar${pathname === '/' ? '' : pathname}`
 
   useGSAP(
     () => {
@@ -90,14 +105,20 @@ export function Header() {
           {/* Right side: Theme toggle + CTA */}
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
-            <Link href="/contact" className="btn-primary text-sm">
-              Get in Touch
+            <Link href={languageHref} className="px-3 py-1.5 rounded-full border border-border text-sm text-muted-foreground hover:text-primary hover:border-primary transition-colors">
+              {isArabic ? 'EN' : 'AR'}
+            </Link>
+            <Link href={isArabic ? '/ar/contact' : '/contact'} className="btn-primary text-sm">
+              {isArabic ? 'ابدأ مشروعك' : 'Get in Touch'}
             </Link>
           </div>
 
           {/* Mobile menu button */}
           <div className="flex items-center gap-4 md:hidden">
             <ThemeToggle />
+            <Link href={languageHref} className="px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground hover:text-primary hover:border-primary transition-colors">
+              {isArabic ? 'EN' : 'AR'}
+            </Link>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 text-foreground hover:bg-muted rounded-lg transition-colors"
@@ -126,7 +147,7 @@ export function Header() {
                 href={item.href}
                 className={cn(
                   "px-4 py-3 rounded-lg font-medium transition-colors",
-                  pathname === item.href
+                  pathname === item.href || pathname === item.href.replace('/ar', '')
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
@@ -135,10 +156,10 @@ export function Header() {
               </Link>
             ))}
             <Link
-              href="/contact"
+              href={isArabic ? '/ar/contact' : '/contact'}
               className="btn-primary text-center mt-4"
             >
-              Get in Touch
+              {isArabic ? 'ابدأ مشروعك' : 'Get in Touch'}
             </Link>
           </div>
         </div>
