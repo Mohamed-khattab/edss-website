@@ -60,6 +60,15 @@ export function Stats() {
           { opacity: 0, scale: 0.92, duration: 0.6, stagger: 0.1 },
           '-=0.4'
         )
+
+      gsap.to('.stats-orb', {
+        y: -12,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.3,
+      })
     },
     { scope: sectionRef }
   )
@@ -68,6 +77,10 @@ export function Stats() {
     <section ref={sectionRef} className="section-padding relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
+      <div className="absolute inset-0 bg-grid opacity-20" />
+      <div className="absolute inset-0 bg-noise opacity-20 mix-blend-soft-light" />
+      <div className="stats-orb absolute -top-20 left-10 w-60 h-60 bg-primary/10 rounded-full blur-3xl animate-pulse-soft" />
+      <div className="stats-orb absolute -bottom-24 right-10 w-60 h-60 bg-accent/10 rounded-full blur-3xl animate-pulse-soft" />
 
       <div className="container-wide relative">
         <div ref={headingRef} className="text-center mb-16">

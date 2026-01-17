@@ -31,6 +31,15 @@ export function CTA() {
         .from(titleRef.current, { opacity: 0, y: 24, duration: 0.6 }, '-=0.35')
         .from(descRef.current, { opacity: 0, y: 20, duration: 0.5 }, '-=0.4')
         .from(buttonsRef.current, { opacity: 0, y: 20, duration: 0.5 }, '-=0.3')
+
+      gsap.to('.cta-orb', {
+        y: -12,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.4,
+      })
     },
     { scope: sectionRef }
   )
@@ -44,8 +53,8 @@ export function CTA() {
         >
           {/* Background decoration */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+            <div className="cta-orb absolute -top-20 -right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse-soft" />
+            <div className="cta-orb absolute -bottom-20 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse-soft" />
 
             {/* Grid pattern */}
             <div
@@ -56,6 +65,7 @@ export function CTA() {
                 backgroundSize: '50px 50px',
               }}
             />
+            <div className="absolute inset-0 bg-noise opacity-20 mix-blend-soft-light" />
           </div>
 
           <div className="relative z-10 max-w-3xl mx-auto text-center">

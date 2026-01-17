@@ -13,6 +13,14 @@ const floatingIcons = [
   { Icon: Settings, position: 'bottom-20 right-10' },
 ]
 
+const titleWords = [
+  { text: 'Transforming', gradient: false },
+  { text: 'Ideas', gradient: false },
+  { text: 'Into', gradient: false },
+  { text: 'Digital', gradient: true },
+  { text: 'Reality', gradient: true },
+]
+
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null)
   const badgeRef = useRef<HTMLSpanElement>(null)
@@ -29,7 +37,7 @@ export function Hero() {
 
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
       tl.from(badgeRef.current, { opacity: 0, y: 30, duration: 0.6 })
-        .from(titleRef.current, { opacity: 0, y: 50, duration: 0.8 }, '-=0.35')
+        .from('.hero-title-word', { opacity: 0, y: 50, duration: 0.75, stagger: 0.06 }, '-=0.35')
         .from(subtitleRef.current, { opacity: 0, y: 30, duration: 0.6 }, '-=0.45')
         .from(ctaRef.current, { opacity: 0, y: 30, duration: 0.5 }, '-=0.35')
         .from(trustRef.current, { opacity: 0, duration: 0.6 }, '-=0.25')
@@ -50,6 +58,32 @@ export function Hero() {
         ease: 'sine.inOut',
       })
 
+      gsap.to('.hero-blob', {
+        y: -24,
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      })
+
+      gsap.to('.hero-orb', {
+        y: 12,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.3,
+      })
+
+      gsap.to('.hero-ring', {
+        rotate: 360,
+        duration: 30,
+        repeat: -1,
+        ease: 'none',
+      })
+
       if (scrollDotRef.current) {
         gsap.to(scrollDotRef.current, {
           y: 5,
@@ -67,15 +101,18 @@ export function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden isolate"
     >
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-muted via-background to-muted" />
+      <div className="absolute inset-0 bg-grid opacity-40" />
+      <div className="absolute inset-0 bg-noise opacity-20 mix-blend-soft-light" />
 
       {/* Animated background shapes */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="hero-blob absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="hero-blob absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        <div className="hero-blob hero-orb absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-soft" />
+        <div className="hero-blob hero-orb absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse-soft" />
+        <div className="hero-ring absolute -top-40 right-10 w-[420px] h-[420px] border border-primary/15 rounded-full" />
       </div>
 
       {/* Floating icons */}
@@ -104,8 +141,15 @@ export function Hero() {
             ref={titleRef}
             className="text-4xl md:text-5xl lg:text-7xl font-bold text-foreground mb-6 leading-tight"
           >
-            Transforming Ideas Into{' '}
-            <span className="gradient-text">Digital Reality</span>
+            {titleWords.map((word, index) => (
+              <span
+                key={word.text}
+                className={`hero-title-word inline-block ${word.gradient ? 'gradient-text' : ''}`}
+              >
+                {word.text}
+                {index < titleWords.length - 1 ? ' ' : ''}
+              </span>
+            ))}
           </h1>
 
           <p

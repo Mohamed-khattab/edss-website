@@ -1,6 +1,9 @@
 'use client'
 
+import { useRef } from 'react'
 import Link from 'next/link'
+import { useGSAP } from '@gsap/react'
+import { gsap } from '@/lib/gsap'
 import { motion } from 'framer-motion'
 import { 
   Package, LayoutDashboard, Users, 
@@ -108,32 +111,62 @@ const itemVariants = {
 }
 
 export default function CaseStudiesPage() {
+  const pageRef = useRef<HTMLDivElement>(null)
+  const heroWords = [
+    { text: 'Success', gradient: false },
+    { text: 'Stories', gradient: true },
+  ]
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      tl.from('.cases-hero-pill', { opacity: 0, y: 20, duration: 0.5 })
+        .from('.cases-hero-title span', { opacity: 0, y: 40, duration: 0.7, stagger: 0.08 }, '-=0.2')
+        .from('.cases-hero-lead', { opacity: 0, y: 20, duration: 0.55 }, '-=0.25')
+
+      gsap.to('.cases-orb', {
+        y: -12,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.3,
+      })
+    },
+    { scope: pageRef }
+  )
+
   return (
-    <>
+    <div ref={pageRef}>
       {/* Hero Section */}
       <section className="pt-32 pb-16 md:pt-40 md:pb-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-muted via-background to-muted" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-grid opacity-30" />
+        <div className="absolute inset-0 bg-noise opacity-20 mix-blend-soft-light" />
+        <div className="cases-orb absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-pulse-soft" />
+        <div className="cases-orb absolute bottom-20 right-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-pulse-soft" />
         
         <div className="container-wide relative">
-          <motion.div
-            className="max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="cases-hero-pill inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               Our Work
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-              Success <span className="gradient-text">Stories</span>
+            <h1 className="cases-hero-title text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+              {heroWords.map((word, index) => (
+                <span
+                  key={word.text}
+                  className={`inline-block ${word.gradient ? 'gradient-text' : ''}`}
+                >
+                  {word.text}
+                  {index < heroWords.length - 1 ? ' ' : ''}
+                </span>
+              ))}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+            <p className="cases-hero-lead text-lg md:text-xl text-muted-foreground leading-relaxed">
               Discover how we&apos;ve helped businesses transform their operations 
               with innovative technology solutions.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -315,6 +348,6 @@ export default function CaseStudiesPage() {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

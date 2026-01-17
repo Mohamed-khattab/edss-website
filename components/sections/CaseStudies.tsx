@@ -62,12 +62,25 @@ export function CaseStudies() {
           '-=0.35'
         )
         .from(ctaRef.current, { opacity: 0, y: 24, duration: 0.5 }, '-=0.25')
+
+      gsap.to('.case-orb', {
+        y: -14,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.4,
+      })
     },
     { scope: sectionRef }
   )
 
   return (
-    <section ref={sectionRef} className="section-padding bg-muted">
+    <section ref={sectionRef} className="section-padding bg-muted relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-20" />
+      <div className="absolute inset-0 bg-noise opacity-15 mix-blend-soft-light" />
+      <div className="case-orb absolute -top-24 left-16 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse-soft" />
+      <div className="case-orb absolute -bottom-24 right-16 w-64 h-64 bg-accent/10 rounded-full blur-3xl animate-pulse-soft" />
       <div className="container-wide">
         <div ref={headingRef}>
           <SectionHeading
@@ -77,7 +90,7 @@ export function CaseStudies() {
           />
         </div>
 
-        <div ref={gridRef} className="grid lg:grid-cols-3 gap-8">
+        <div ref={gridRef} className="grid lg:grid-cols-3 gap-8 relative">
           {caseStudies.map((study) => (
             <Link
               key={study.id}

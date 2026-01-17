@@ -1,6 +1,9 @@
 'use client'
 
+import { useRef } from 'react'
 import Link from 'next/link'
+import { useGSAP } from '@gsap/react'
+import { gsap } from '@/lib/gsap'
 import { motion } from 'framer-motion'
 import { 
   Code2, Network, Cpu, Settings, 
@@ -116,32 +119,63 @@ const itemVariants = {
 }
 
 export default function ServicesPage() {
+  const pageRef = useRef<HTMLDivElement>(null)
+  const heroWords = [
+    { text: 'Comprehensive', gradient: false },
+    { text: 'Technology', gradient: true },
+    { text: 'Solutions', gradient: true },
+  ]
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      tl.from('.services-hero-pill', { opacity: 0, y: 20, duration: 0.5 })
+        .from('.services-hero-title span', { opacity: 0, y: 40, duration: 0.7, stagger: 0.08 }, '-=0.2')
+        .from('.services-hero-lead', { opacity: 0, y: 20, duration: 0.55 }, '-=0.25')
+
+      gsap.to('.services-orb', {
+        y: -12,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.3,
+      })
+    },
+    { scope: pageRef }
+  )
+
   return (
-    <>
+    <div ref={pageRef}>
       {/* Hero Section */}
       <section className="pt-32 pb-16 md:pt-40 md:pb-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-muted via-background to-muted" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-grid opacity-30" />
+        <div className="absolute inset-0 bg-noise opacity-20 mix-blend-soft-light" />
+        <div className="services-orb absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-pulse-soft" />
+        <div className="services-orb absolute bottom-20 right-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-pulse-soft" />
         
         <div className="container-wide relative">
-          <motion.div
-            className="max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="services-hero-pill inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               Our Services
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-              Comprehensive <span className="gradient-text">Technology Solutions</span>
+            <h1 className="services-hero-title text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+              {heroWords.map((word, index) => (
+                <span
+                  key={word.text}
+                  className={`inline-block ${word.gradient ? 'gradient-text' : ''}`}
+                >
+                  {word.text}
+                  {index < heroWords.length - 1 ? ' ' : ''}
+                </span>
+              ))}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+            <p className="services-hero-lead text-lg md:text-xl text-muted-foreground leading-relaxed">
               From custom software to enterprise integration, we deliver end-to-end solutions 
               that transform how businesses operate and grow.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -252,6 +286,6 @@ export default function ServicesPage() {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

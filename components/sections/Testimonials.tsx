@@ -51,6 +51,15 @@ export function Testimonials() {
       })
       tl.from(headingRef.current, { opacity: 0, y: 40, duration: 0.7 })
         .from(cardRef.current, { opacity: 0, y: 40, duration: 0.6 }, '-=0.35')
+
+      gsap.to('.testimonial-orb', {
+        y: -12,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.4,
+      })
     },
     { scope: sectionRef }
   )
@@ -67,8 +76,8 @@ export function Testimonials() {
     <section ref={sectionRef} className="section-padding relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />
+        <div className="testimonial-orb absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-pulse-soft" />
+        <div className="testimonial-orb absolute bottom-20 right-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-pulse-soft" />
       </div>
 
       <div className="container-wide relative">
